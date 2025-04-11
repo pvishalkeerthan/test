@@ -1,6 +1,4 @@
 "use client";
-export const dynamic = 'force-dynamic';
-
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -10,7 +8,11 @@ import { Button } from "@/components/ui/button";
 import { createTest } from "@/actions/testActions";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import Lottie from "lottie-react";
+import dynamic from "next/dynamic"; 
+
+// Dynamically import Lottie only on the client-side (SSR: false)
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+
 import loadingAnimation from "../../../public/loading2.json";
 import loadingAnimationDark from "../../../public/loading.json";
 
