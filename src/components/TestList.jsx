@@ -1,6 +1,7 @@
 
 import React from "react";
 import TestCard from "./TestCard";
+import TestDetails from "./TestDetails";
 import { Loader2 } from "lucide-react";
 
 const TestList = ({ tests, handleTestClick, loading, selectedTest, onCloseDetails }) => {
