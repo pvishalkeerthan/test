@@ -9,14 +9,16 @@ import { Button } from "@/components/ui/button";
 import { createTest } from "@/actions/testActions";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import Lottie from 'lottie-react';
-import loadingAnimation from '../../../public/loading2.json';
-import loadingAnimationDark from '../../../public/loading.json';
+import Lottie from "lottie-react";
+import loadingAnimation from "../../../public/loading2.json";
+import loadingAnimationDark from "../../../public/loading.json";
 
 const TestStartPage = () => {
   const { data: session, status } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const [animationData, setAnimationData] = useState(null);
+
   const [testDetails, setTestDetails] = useState({
     title: "",
     description: "",
@@ -35,6 +37,14 @@ const TestStartPage = () => {
       router.push("/signin");
     }
   }, [status, router]);
+
+  useEffect(() => {
+    if (isLoading) {
+      // Safe check for dark mode class
+      const isDark = typeof document !== "undefined" && document.body.classList.contains("dark");
+      setAnimationData(isDark ? loadingAnimationDark : loadingAnimation);
+    }
+  }, [isLoading]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -65,16 +75,13 @@ const TestStartPage = () => {
     return null;
   }
 
-  if (isLoading) {
-    // Determine which animation to use based on the theme
-    const animationData = document.body.classList.contains('dark') ? loadingAnimationDark : loadingAnimation;
-
+  if (isLoading && animationData) {
     return (
       <div className="flex flex-col items-center justify-center h-screen w-screen bg-white dark:bg-black fixed top-0 left-0 z-50">
         <Lottie
           animationData={animationData}
           loop={true}
-          className="w-1/2 h-1/2" // Adjust size here
+          className="w-1/2 h-1/2"
         />
         <p className="mt-4 text-lg text-gray-800 dark:text-white bounce">Creating test...</p>
       </div>
